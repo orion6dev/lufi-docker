@@ -1,0 +1,22 @@
+diff --git a/themes/default/public/js/lufi-notifications.js b/themes/default/public/js/lufi-notifications.js
+index a3616aaa1efacd787d9b41f09b6739f8e793c12a..19b02f2aa88665e8b4df02fe26d5d99b81560026 100644
+--- a/themes/default/public/js/lufi-notifications.js
++++ b/themes/default/public/js/lufi-notifications.js
+@@ -11,7 +11,16 @@ function notify(title, body) {
+             body: body,
+             icon: '/img/lufi196.png'
+         };
+-        let n = new Notification(title, options);
++
++        try {
++            let n = new Notification(title, options);
++        } catch (e) {
++            if (e.name === 'TypeError') {
++                console.log(`This browser does not support new notifications, cannot send following message: ${title} ${body}`);
++            } else {
++                throw e;
++            }
++        }
+     }
+ }
+ 
