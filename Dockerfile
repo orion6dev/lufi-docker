@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-ARG LUFI_VERSION=0.07.0
+ARG LUFI_VERSION=0.07.3
 ARG GID=1000
 ARG UID=1000
 
@@ -42,6 +42,10 @@ RUN wget https://framagit.org/fiat-tux/hat-softwares/lufi/-/archive/${LUFI_VERSI
     && rm -rf /tmp/* \ 
     && rm -rf /home/nonroot/lufi/lufi-${LUFI_VERSION}.zip
 
+
+# Apply patch to catch notifs errors (https://framagit.org/fiat-tux/hat-softwares/lufi/-/commit/55a0dbfeebe85bd7d8aef79b84e36d8b710221ca)
+COPY --chown=nonroot:nonroot catch_notifs_error.diff .
+RUN patch -p1 <catch_notifs_error.diff && rm -f catch_notifs_error.diff
 
 COPY --chown=nonroot:nonroot lufi.conf .
 RUN mkdir -p themes/megalis/
